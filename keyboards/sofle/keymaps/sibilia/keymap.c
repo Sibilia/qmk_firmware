@@ -17,7 +17,8 @@ enum custom_keycodes {
   KC_NXTWD,
   KC_LSTRT,
   KC_LEND,
-  KC_DLINE
+  KC_DLINE,
+  KC_CAD
 };
 
 
@@ -68,7 +69,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 ),
 /* RAISE
  * ,-----------------------------------------.                    ,-----------------------------------------.
- * |      |      |      |      |      |      |                    |      |      |      |      |      |      |
+ * |      |      |      |      |      |      |                    |KC_CAD|      |      |      |      |      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * | Esc  | Ins  | Pscr | Menu |      |      |                    | PGup | PWrd |  Up  | NWrd | DLine| Bspc |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
@@ -81,7 +82,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *            `----------------------------------'           '------''---------------------------'
  */
 [_RAISE] = LAYOUT(
-  _______, _______, _______, _______, _______,  _______,                   _______, _______,  _______, _______,  _______,  _______,
+  _______, _______, _______, _______, _______,  _______,                   KC_CAD,  _______,  _______, _______,  _______,  _______,
   _______, KC_INS,  KC_PSCR, KC_APP,  XXXXXXX,  XXXXXXX,                   KC_PGUP, KC_PRVWD, KC_UP,   KC_NXTWD, KC_DLINE, KC_BSPC,
   _______, KC_LALT, KC_LCTL, KC_LSFT, XXXXXXX,  KC_CAPS,                   KC_PGDN, KC_LEFT,  KC_DOWN, KC_RGHT,  KC_DEL,   KC_BSPC,
   _______, KC_UNDO, KC_CUT,  KC_COPY, KC_PASTE, XXXXXXX, _______, _______, XXXXXXX, KC_LSTRT, XXXXXXX, KC_LEND,  XXXXXXX,  _______,
@@ -89,24 +90,24 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 ),
 /* ADJUST
  * ,-------------------------------------------.                    ,-----------------------------------------.
- * | E_RST  |      |      |      |      |      |                    |      |      |      |      |      |      |
+ * |        |      |      |      |      |      |                    |      |      |      |      |      |E_RST |
  * |--------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * | RESET  |      |      |      |      |      |                    |      |      |      |      |      |      |
+ * |RGB_TOG |      |      |      |      |      |                    |      |      |      |      |      |RESET |
  * |--------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |RGB_TOG |hue_u |sat_u |bri_u |      |      |-------.    ,-------|      | VOLDO| MUTE | VOLUP|      |      |
+ * |RGB_MOD+|hue_u |sat_u |bri_u |spd_i |      |-------.    ,-------|      | VOLDO| MUTE | VOLUP|      |      |
  * |--------+------+------+------+------+------|  MUTE |    |       |------+------+------+------+------+------|
- * |rgb_mode|hue_d |sat_d |bri_d |      |      |-------|    |-------|      | PREV | PLAY | NEXT |      |      |
+ * |RGB_MOD-|hue_d |sat_d |bri_d |spd_d |      |-------|    |-------|      | PREV | PLAY | NEXT |      |      |
  * `------------------------------------------/       /     \      \-----------------------------------------'
  *             | LGUI | LAlt | LCTR |LOWER | /Enter  /       \Space \  |RAISE | RCTR | RAlt | RGUI |
  *             |      |      |      |      |/       /         \      \ |      |      |      |      |
  *             `-----------------------------------'           '------''---------------------------'
  */
 [_ADJUST] = LAYOUT(
-  EEP_RST, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-  RESET,   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-  RGB_TOG, RGB_HUI, RGB_SAI, RGB_VAI, XXXXXXX, XXXXXXX,                   XXXXXXX, KC_VOLD, KC_MUTE, KC_VOLU, XXXXXXX, XXXXXXX,
-  RGB_MOD, RGB_HUD, RGB_SAD, RGB_VAD, XXXXXXX, XXXXXXX, _______, _______, XXXXXXX, KC_MPRV, KC_MPLY, KC_MNXT, XXXXXXX, XXXXXXX,
-                    _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
+  XXXXXXX,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, EEP_RST,
+  RGB_TOG,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, RESET,
+  RGB_MOD,  RGB_HUI, RGB_SAI, RGB_VAI, RGB_SPI, XXXXXXX,                   XXXXXXX, KC_VOLD, KC_MUTE, KC_VOLU, XXXXXXX, XXXXXXX,
+  RGB_RMOD, RGB_HUD, RGB_SAD, RGB_VAD, RGB_SPD, XXXXXXX, _______, _______, XXXXXXX, KC_MPRV, KC_MPLY, KC_MNXT, XXXXXXX, XXXXXXX,
+                     _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
   )
 };
 
@@ -260,6 +261,17 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             } else {
                 unregister_mods(mod_config(MOD_LCTL));
                 unregister_code(KC_Z);
+            }
+            return false;
+        case KC_CAD:
+            if (record->event.pressed) {
+                register_mods(mod_config(MOD_RCTL));
+                register_mods(mod_config(MOD_RALT));
+                register_code(KC_DEL);
+            } else {
+                unregister_mods(mod_config(MOD_RCTL));
+                unregister_mods(mod_config(MOD_RALT));
+                unregister_code(KC_DEL);
             }
             return false;
     }
