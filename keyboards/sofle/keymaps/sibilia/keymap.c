@@ -6,6 +6,7 @@ enum sofle_layers {
   _LOWER,
   _RAISE,
   _ADJUST,
+  _NUMPAD,
 };
 
 enum custom_keycodes {
@@ -13,6 +14,7 @@ enum custom_keycodes {
   KC_LOWER,
   KC_RAISE,
   KC_ADJUST,
+  KC_NMLC,
   KC_PRVWD,
   KC_NXTWD,
   KC_LSTRT,
@@ -69,7 +71,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 ),
 /* RAISE
  * ,-----------------------------------------.                    ,-----------------------------------------.
- * |      |      |      |      |      |      |                    |KC_CAD|      |      |      |      |      |
+ * |      |      |      |      |      |      |                    |KC_CAD|NumLck|      |      |      |      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * | Esc  | Ins  | Pscr | Menu |      |      |                    | PGup | PWrd |  Up  | NWrd | DLine| Bspc |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
@@ -82,7 +84,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *            `----------------------------------'           '------''---------------------------'
  */
 [_RAISE] = LAYOUT(
-  _______, _______, _______, _______, _______,  _______,                   KC_CAD,  _______,  _______, _______,  _______,  _______,
+  _______, _______, _______, _______, _______,  _______,                   KC_CAD,  KC_NMLC,  _______, _______,  _______,  _______,
   _______, KC_INS,  KC_PSCR, KC_APP,  XXXXXXX,  XXXXXXX,                   KC_PGUP, KC_PRVWD, KC_UP,   KC_NXTWD, KC_DLINE, KC_BSPC,
   _______, KC_LALT, KC_LCTL, KC_LSFT, XXXXXXX,  KC_CAPS,                   KC_PGDN, KC_LEFT,  KC_DOWN, KC_RGHT,  KC_DEL,   KC_BSPC,
   _______, KC_UNDO, KC_CUT,  KC_COPY, KC_PASTE, XXXXXXX, _______, _______, XXXXXXX, KC_LSTRT, XXXXXXX, KC_LEND,  XXXXXXX,  _______,
@@ -90,7 +92,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 ),
 /* ADJUST
  * ,-------------------------------------------.                    ,-----------------------------------------.
- * |        |      |      |      |      |      |                    |      |      |      |      |      |E_RST |
+ * |        | BRID | BRIU |      |      |      |                    |      |      |      |      |      |E_RST |
  * |--------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * |RGB_TOG |      |      |      |      |      |                    |      |      |      |      |      |RESET |
  * |--------+------+------+------+------+------|                    |------+------+------+------+------+------|
@@ -103,12 +105,33 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *             `-----------------------------------'           '------''---------------------------'
  */
 [_ADJUST] = LAYOUT(
-  XXXXXXX,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, EEP_RST,
+  XXXXXXX,  KC_BRID, KC_BRIU, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, EEP_RST,
   RGB_TOG,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, RESET,
   RGB_MOD,  RGB_HUI, RGB_SAI, RGB_VAI, RGB_SPI, XXXXXXX,                   XXXXXXX, KC_VOLD, KC_MUTE, KC_VOLU, XXXXXXX, XXXXXXX,
   RGB_RMOD, RGB_HUD, RGB_SAD, RGB_VAD, RGB_SPD, XXXXXXX, _______, _______, XXXXXXX, KC_MPRV, KC_MPLY, KC_MNXT, XXXXXXX, XXXXXXX,
                      _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
-  )
+),
+/* NUMPAD
+ * ,-----------------------------------------.                    ,-----------------------------------------.
+ * |      |      |      |      |      |      |                    |      |NumLck|      |      |      |      |
+ * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
+ * |      |      |      |      |      |      |                    |   ^  |   7  |   8  |   9  |   *  |      |
+ * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
+ * |      |      |      |      |      |      |-------.    ,-------|   -  |   4  |   5  |   6  |      |   |  |
+ * |------+------+------+------+------+------|  MUTE |    |       |------+------+------+------+------+------|
+ * |      |      |      |      |      |      |-------|    |-------|   +  |   1  |   2  |   3  |   \  | Shift|
+ * `-----------------------------------------/       /     \      \-----------------------------------------'
+ *            | LGUI | LAlt | LCTR |LOWER | /Enter  /       \Space \  |RAISE | 0    |  .   | RGUI |
+ *            |      |      |      |      |/       /         \      \ |      |      |      |      |
+ *            `----------------------------------'           '------''---------------------------'
+ */
+[_NUMPAD] = LAYOUT(
+  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, KC_NMLC, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   KC_CIRC, KC_P7,   KC_P8,   KC_P9,   KC_ASTR, XXXXXXX,
+  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   KC_MINS, KC_P4,   KC_P5,   KC_P6,   KC_EQL,  KC_PIPE,
+  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, _______, KC_PLUS, KC_P1,   KC_P2,   KC_P3,   KC_SLSH, _______,
+                    _______, _______, _______, _______, _______, _______, _______, KC_P0,   KC_PDOT, _______
+)
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -141,6 +164,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 layer_on(_ADJUST);
             } else {
                 layer_off(_ADJUST);
+            }
+            return false;
+        case KC_NMLC:
+            if (record->event.pressed) {
+                layer_on(_NUMPAD);
+            } else {
+                layer_off(_NUMPAD);
             }
             return false;
         case KC_PRVWD:

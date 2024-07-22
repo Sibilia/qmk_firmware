@@ -11,7 +11,7 @@
 
     static void print_status_narrow(void) {
         // Print current mode
-        oled_write_P(PSTR("\n\n"), false);
+        oled_write_P(PSTR("\n"), false);
         oled_write_ln_P(PSTR("MODE"), false);
         oled_write_ln_P(PSTR(""), false);
         if (keymap_config.swap_lctl_lgui) {
@@ -42,6 +42,9 @@
                 break;
             case _ADJUST:
                 oled_write_P(PSTR("Adj\n"), false);
+                break;
+            case _NUMPAD:
+                oled_write_P(PSTR("Nmpd\n"), false);
                 break;
             default:
                 oled_write_ln_P(PSTR("----"), false);
